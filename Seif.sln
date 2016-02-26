@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seif.Core", "Seif.Core\Seif.Core.csproj", "{9DC8E595-87ED-4FBA-8468-7114E0882D0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seif.Soa", "Seif.Soa\Seif.Soa.csproj", "{7E5C2065-2251-4267-9A34-8E3987A49621}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9DC8E595-87ED-4FBA-8468-7114E0882D0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DC8E595-87ED-4FBA-8468-7114E0882D0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DC8E595-87ED-4FBA-8468-7114E0882D0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DC8E595-87ED-4FBA-8468-7114E0882D0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E5C2065-2251-4267-9A34-8E3987A49621}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E5C2065-2251-4267-9A34-8E3987A49621}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E5C2065-2251-4267-9A34-8E3987A49621}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E5C2065-2251-4267-9A34-8E3987A49621}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
