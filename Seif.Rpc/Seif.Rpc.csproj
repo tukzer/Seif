@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{98BD52D9-F19B-4B07-953A-08E94D93FA5A}</ProjectGuid>
+    <ProjectGuid>{EF5DD43C-7961-4B89-8A5B-6DE3D2B7DD46}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Seif.Rpc</RootNamespace>
@@ -31,10 +31,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Castle.Core.3.3.3\lib\net40-client\Castle.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -43,46 +44,42 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client\RpcInvocation.cs" />
-    <Compile Include="IInvocation.cs" />
-    <Compile Include="Client\CallingInterceptor.cs" />
-    <Compile Include="Client\DynamicProxyFactory.cs" />
-    <Compile Include="Client\IProxyFactory.cs" />
-    <Compile Include="RpcResult.cs" />
-    <Compile Include="Properties\IInvoker.cs" />
-    <Compile Include="Server\RpcContext.cs" />
-    <Compile Include="Soa\DefaultInvoker.cs" />
-    <Compile Include="Soa\ISoaRouter.cs" />
-    <Compile Include="Soa\Url.cs" />
-    <Compile Include="Transport\IChannel.cs" />
-    <Compile Include="Transport\IChannelHandler.cs" />
-    <Compile Include="Transport\IEndpoint.cs" />
-    <Compile Include="Transport\IRpcClient.cs" />
-    <Compile Include="Transport\IRpcServer.cs" />
-    <Compile Include="Transport\ITransporter.cs" />
+    <Compile Include="Configuration\ConsumerConfiguration.cs" />
+    <Compile Include="Configuration\ServiceConfiguration.cs" />
+    <Compile Include="Dispatch\IDispathStragedy.cs" />
+    <Compile Include="Dispatch\RoundRobinDispatchStragedy.cs" />
+    <Compile Include="Dispatch\ServiceLoad.cs" />
+    <Compile Include="Invoke\Default\CallingInterceptor.cs" />
+    <Compile Include="Invoke\Default\DefaultInvokeDispatcher.cs" />
+    <Compile Include="Dispatch\IInvokeDispatcher.cs" />
+    <Compile Include="Invoke\Default\LocalInvoker.cs" />
+    <Compile Include="Invoke\InvokerWrapper.cs" />
+    <Compile Include="Mock\MockService.cs" />
+    <Compile Include="SeifApplication.cs" />
+    <Compile Include="Configuration\ProviderConfiguration.cs" />
+    <Compile Include="Configuration\RegistryConfiguration.cs" />
+    <Compile Include="Consts.cs" />
+    <Compile Include="Invoke\Default\DefaultInvokerFactory.cs" />
+    <Compile Include="Invoke\Default\DynamicProxyFactory.cs" />
+    <Compile Include="Invoke\Default\HttpInvoker.cs" />
+    <Compile Include="Invoke\IInvokeFilter.cs" />
+    <Compile Include="Invoke\IInvoker.cs" />
+    <Compile Include="Invoke\IInvokerFactory.cs" />
+    <Compile Include="Invoke\InstanceType.cs" />
+    <Compile Include="Invoke\IProxyFactory.cs" />
+    <Compile Include="ISerializer.cs" />
+    <Compile Include="ITypeBuilder.cs" />
+    <Compile Include="Mock\DBRegistry.cs" />
+    <Compile Include="Mock\MockServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RpcException.cs" />
-    <Compile Include="Transport\ChannelHandlerAdapter.cs" />
-    <Compile Include="Transport\ChannelHandlerDispatcher.cs" />
-    <Compile Include="Transport\Transporters.cs" />
-    <Compile Include="Utils\LruCache.cs" />
-    <Compile Include="Utils\NetUtils.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Seif.Core\Seif.Core.csproj">
-      <Project>{9dc8e595-87ed-4fba-8468-7114e0882d0d}</Project>
-      <Name>Seif.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Seif.Soa\Seif.Soa.csproj">
-      <Project>{7E5C2065-2251-4267-9A34-8E3987A49621}</Project>
-      <Name>Seif.Soa</Name>
-    </ProjectReference>
+    <Compile Include="Invoke\ProxyOptions.cs" />
+    <Compile Include="Registry\IServiceRegistry.cs" />
+    <Compile Include="RpcContext.cs" />
+    <Compile Include="SeifException.cs" />
+    <Compile Include="Utils\TypeUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Codec\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

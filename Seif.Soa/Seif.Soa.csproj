@@ -43,8 +43,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\Filters\IInvokeFilter.cs" />
+    <Compile Include="Configuration\ConsumerConfiguration.cs" />
+    <Compile Include="Configuration\IConfiguration.cs" />
+    <Compile Include="Configuration\ProviderConfiguration.cs" />
+    <Compile Include="Configuration\RegistryConfiguaration.cs" />
+    <Compile Include="Default\HttpInvoker.cs" />
     <Compile Include="IInvokeHandler.cs" />
     <Compile Include="Registry\IRegistry.cs" />
+    <Compile Include="Registry\IRegistryFactory.cs" />
     <Compile Include="Registry\RegistryMetta.cs" />
     <Compile Include="Transport\AbstractRequest.cs" />
     <Compile Include="Transport\AbstractResponse.cs" />
@@ -76,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Monitor\" />
+    <Folder Include="Rpc\" />
     <Folder Include="Server\" />
   </ItemGroup>
   <ItemGroup>
