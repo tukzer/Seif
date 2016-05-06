@@ -79,11 +79,11 @@ namespace Seif.Rpc
                 InterfaceType = serviceConfiguration.InterfaceType,
                 Protocol = serviceConfiguration.Protocol,
                 SerializeMode = serviceConfiguration.SerializeMode,
-                ServiceUrl = serviceConfiguration.ServiceUrl,
+                ApiDomain = serviceConfiguration.ApiDomain,
                 IsEnabled = true
             };
 
-            AppEnv._serviceRegistry.RegisterService<T, TImpl>(serviceMetta);
+            AppEnv._serviceRegistry.RegisterService(serviceMetta);
         }
 
         public static void ReferenceService<T>(ProxyOptions options, IInvokeFilter[] filters) where T : class

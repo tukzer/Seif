@@ -14,5 +14,14 @@ namespace Seif.Rpc.Utils
             var assembly = Assembly.Load(typeDefArr[1]);
             return (T) assembly.CreateInstance(typeDefArr[0]);
         }
+
+        public static string GetTypeDefinition<TImpl>()
+        {
+            var implType = typeof (TImpl);
+            var fullTypeName = implType.FullName;
+            var assemblyName = implType.AssemblyQualifiedName;
+
+            return string.Join(",", fullTypeName, assemblyName);
+        }
     }
 }

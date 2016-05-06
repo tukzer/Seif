@@ -1,6 +1,1 @@
-C:\Users\wancheng\Source\Repos\Yoseif\Seif\Seif.Rpc\bin\Debug\Seif.Rpc.dll
-C:\Users\wancheng\Source\Repos\Yoseif\Seif\Seif.Rpc\bin\Debug\Seif.Rpc.pdb
-C:\Users\wancheng\Source\Repos\Yoseif\Seif\Seif.Rpc\obj\Debug\Seif.Rpc.dll
-C:\Users\wancheng\Source\Repos\Yoseif\Seif\Seif.Rpc\obj\Debug\Seif.Rpc.pdb
-C:\Users\wancheng\Source\Repos\Yoseif\Seif\Seif.Rpc\bin\Debug\Castle.Core.dll
-C:\Users\wancheng\Source\Repos\Yoseif\Seif\Seif.Rpc\bin\Debug\Castle.Core.xml
+C:\Users\wancheng\Source\Repos\Yoseif\Seif\Seif.Rpc\obj\Debug\Seif.Rpc.csprojResolveAssemblyReference.cache

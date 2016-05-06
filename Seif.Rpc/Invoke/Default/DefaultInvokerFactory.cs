@@ -10,7 +10,7 @@ namespace Seif.Rpc.Invoke.Default
             switch (options.Protocol)
             {
                 case "HTTP":
-                    return new HttpInvoker(options.ServiceUrl, null);
+                    return new HttpInvoker(options.ApiDomain, null);
                 default:
                     return null;
             }

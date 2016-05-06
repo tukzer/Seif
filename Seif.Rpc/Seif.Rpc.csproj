@@ -55,6 +55,11 @@
     <Compile Include="Invoke\Default\LocalInvoker.cs" />
     <Compile Include="Invoke\InvokerWrapper.cs" />
     <Compile Include="Mock\MockService.cs" />
+    <Compile Include="Registry\IRegistryDataStore.cs" />
+    <Compile Include="Registry\IRegistryNotify.cs" />
+    <Compile Include="Registry\RegistryDataInfo.cs" />
+    <Compile Include="Registry\RegistryUtils.cs" />
+    <Compile Include="Registry\ServiceRegistryMetta.cs" />
     <Compile Include="SeifApplication.cs" />
     <Compile Include="Configuration\ProviderConfiguration.cs" />
     <Compile Include="Configuration\RegistryConfiguration.cs" />
@@ -69,7 +74,7 @@
     <Compile Include="Invoke\IProxyFactory.cs" />
     <Compile Include="ISerializer.cs" />
     <Compile Include="ITypeBuilder.cs" />
-    <Compile Include="Mock\DBRegistry.cs" />
+    <Compile Include="Registry\GenericRegistry.cs" />
     <Compile Include="Mock\MockServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Invoke\ProxyOptions.cs" />
