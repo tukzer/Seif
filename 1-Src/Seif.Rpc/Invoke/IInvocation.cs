@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Seif.Rpc.Common;
 
 namespace Seif.Rpc.Invoke
 {
@@ -9,8 +10,9 @@ namespace Seif.Rpc.Invoke
         ServiceKind ServiceKind { get; }
         string ServiceName { get; }
         string MethodName { get; }
+        Type ReturnType { get; }
 
-        IDictionary<Type, object> Parameters { get; }
+        IList<ParameterData> Parameters { get; }
         IDictionary<string, string> Attributes { get; set; }
     }
 }

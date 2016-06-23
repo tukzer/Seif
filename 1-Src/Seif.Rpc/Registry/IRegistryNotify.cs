@@ -5,11 +5,12 @@ namespace Seif.Rpc.Registry
     public interface IRegistryNotify
     {
         event EventHandler<ServiceNotifyEventArgs> ServiceChanged;
-        //event EventHandler<ServerNotifyEventArgs> ServerChanged;
 
         void NotifyChange(ServiceRegistryMetta data);
 
         void Subscribe(string serviceIdentifier);
+
+        void Unsubscribe(string serviceIdentifier);
     }
 
     public class ServiceNotifyEventArgs : EventArgs
@@ -17,9 +18,4 @@ namespace Seif.Rpc.Registry
         public ServiceRegistryMetta Data { get; set; }
     }
 
-    public class ServerNotifyEventArgs : EventArgs
-    {
-        public ServiceRegistryMetta[] Data { get; set; }
- 
-    }
 }

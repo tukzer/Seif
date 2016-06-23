@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Seif.Rpc.Registry;
+using Seif.Rpc.Utils;
 using ServiceStack.Redis;
 using ServiceStack.Redis.Generic;
 
@@ -12,14 +13,44 @@ namespace Seif.Rpc.Default
         private readonly IRedisClient _redisClient;
         private readonly IRedisTypedClient<RegistryDataInfo> _typedClient;
         private readonly IRedisList<RegistryDataInfo> _table;
+
+        private readonly IRedisSubscription _redisSubscription;
+
         private bool _isDisposed;
         private readonly ISerializer _serializer = new ServiceStackJsonSerializer();
 
-        public RedisRegistryProvider(string url, string collectionName = "RegistryData")
+        public RedisRegistryProvider()
         {
+            if (SeifApplication.AppEnv.GlobalConfiguration.RegistryConfiguration == null)
+                throw new Exception("注册中心配置有误");
+
+            string url = SeifApplication.AppEnv.GlobalConfiguration.RegistryConfiguration.Url;
+            string collectionName = "RegistryData";
+
+            var attrs = DictionaryUtils.GetFromConfig(SeifApplication.AppEnv.GlobalConfiguration.RegistryConfiguration.AddtionalFields);
+            if (attrs != null && attrs.ContainsKey(AttrKeys.Registry_RedisCollectionName) )
+            {
+                if (!string.IsNullOrEmpty(attrs[AttrKeys.Registry_RedisCollectionName]))
+                {
+                    collectionName = attrs[AttrKeys.Registry_RedisCollectionName];
+                }
+            }
+
             _redisClient = new RedisClient(url);
             _typedClient = _redisClient.As<RegistryDataInfo>();
             _table = _typedClient.Lists[collectionName];
+
+            _redisSubscription = _redisClient.CreateSubscription();
+            _redisSubscription.OnMessage += (channel, msg) =>
+            {
+                var data = _serializer.Deserialize<ServiceRegistryMetta>(msg);
+                if (this.ServiceChanged == null) return;
+
+                this.ServiceChanged(this, new ServiceNotifyEventArgs
+                {
+                    Data = data
+                });
+            };
         }
 
         public event EventHandler<ServiceNotifyEventArgs> ServiceChanged;
@@ -31,23 +62,13 @@ namespace Seif.Rpc.Default
 
         public void Subscribe(string serviceIdentifier)
         {
-            using (var sub = _redisClient.CreateSubscription())
-            {
-                sub.SubscribeToChannels(serviceIdentifier);
-
-                sub.OnMessage += (channel, msg) =>
-                {
-                    var data = _serializer.Deserialize<ServiceRegistryMetta>(msg);
-                    if (this.ServiceChanged == null) return;
-
-                    this.ServiceChanged(this, new ServiceNotifyEventArgs
-                    {
-                        Data = data
-                    });
-                };
-            }
+            _redisSubscription.SubscribeToChannels(serviceIdentifier);
         }
 
+        public void Unsubscribe(string serviceIdentifier)
+        {
+            _redisSubscription.UnSubscribeFromChannels(serviceIdentifier);
+        }
 
         public void Add(RegistryDataInfo data)
         {
@@ -102,6 +123,12 @@ namespace Seif.Rpc.Default
             {
                 if (disposing)
                 {
+                    if (_redisSubscription != null)
+                    {
+                        _redisSubscription.UnSubscribeFromAllChannels();
+                        _redisSubscription.Dispose();
+                    }
+
                     if (_redisClient != null)
                     {
                         _redisClient.UnWatch();

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Security.AccessControl;
 
 namespace Seif.Rpc.Registry
@@ -27,7 +28,7 @@ namespace Seif.Rpc.Registry
         public string SerializeMode { get; set; }
         public bool IsEnabled { get; set; }
         public string Remark { get; set; }
-        public string AdditionalFields { get; set; }
+        public IDictionary<string,string> AdditionalFields { get; set; }
 
         #endregion
 
@@ -41,10 +42,9 @@ namespace Seif.Rpc.Registry
 
         public string Identifier
         {
-            get { return string.Format("{0}-{1}-{2}", ApiDomain, ServerAddress, InterfaceName); }
+            get { return string.Format("{0}@{1}-{2}", ApiDomain, ServerAddress, InterfaceName); }
         }
 
         #endregion
-
     }
 }

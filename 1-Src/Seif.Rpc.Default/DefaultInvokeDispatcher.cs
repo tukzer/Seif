@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Linq;
 using Seif.Rpc.Dispatch;
+using Seif.Rpc.Invoke;
 
-namespace Seif.Rpc.Invoke.Default
+namespace Seif.Rpc.Default
 {
     public class DefaultInvokeDispatcher :  IInvokeDispatcher
     {
         public IInvoker Dispatch<T>(DispatchOptions options)
         {
-            if (options.ServiceKind == ServiceKind.Local)
-            {
-                return new LocalInvoker<T>();
-            }
+            //if (options.ServiceKind == ServiceKind.Local)
+            //{
+            //    return new LocalInvoker<T>(null);
+            //}
 
             var metta = SeifApplication.AppEnv.GlobalConfiguration.Registry.GetServiceRegistryMetta<T>();
 

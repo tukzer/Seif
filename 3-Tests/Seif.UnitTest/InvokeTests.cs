@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Seif.Rpc.Default;
 using Seif.Rpc.Invoke;
-using Seif.Rpc.Invoke.Default;
 
 namespace Seif.UnitTest
 {

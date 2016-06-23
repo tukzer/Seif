@@ -1,5 +1,7 @@
 ﻿using System;
 using Autofac;
+using Seif.Rpc.Utils;
+using Autofac.Core;
 
 namespace Seif.Rpc.Default
 {
@@ -10,7 +12,7 @@ namespace Seif.Rpc.Default
 
         public void RegisterType<T, TImpl>() where TImpl : class
         {
-            _containerBuilder.RegisterType<TImpl>().As<T>();
+            _containerBuilder.RegisterType<TImpl>().As<T>().Named<T>(typeof(T).FullName);
         }
 
         public void RegisterType<T>(T instance) where T : class
@@ -35,10 +37,9 @@ namespace Seif.Rpc.Default
 
         public object ResolveType(string interfaceName)
         {
-            var type = Type.GetType(interfaceName);
+            var type = TypeUtils.GetType(interfaceName);
 
             return _container.Resolve(type);
-
         }
     }
 }

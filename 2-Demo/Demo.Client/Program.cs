@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using Demo.Service;
 using Seif.Rpc;
 using Seif.Rpc.Configuration;
 using Seif.Rpc.Default;
 using Seif.Rpc.Invoke;
-using Seif.Rpc.Invoke.Default;
 using Seif.Rpc.Registry;
 
 namespace Demo.Client
@@ -43,27 +43,28 @@ namespace Demo.Client
             config.SerializerDefinition = new KeyValueConfigurationCollection();
             config.SerializerDefinition.Add("ServiceStackJsonSerializer", typeof(ServiceStackJsonSerializer).AssemblyQualifiedName);
 
-            config.InvokersDefinition = new KeyValueConfigurationCollection();
-            config.InvokersDefinition.Add("HttpInvoker", typeof(HttpInvoker).AssemblyQualifiedName);
+            //config.InvokersDefinition = new KeyValueConfigurationCollection();
+            //config.InvokersDefinition.Add("HttpInvoker", typeof(HttpInvoker).AssemblyQualifiedName);
             config.InvokeFilterDefinition = new KeyValueConfigurationCollection();
             config.InvokerFactoryDefinition = typeof (DefaultInvokerFactory).AssemblyQualifiedName;
             config.InvokerDispatcherDefinition = typeof (DefaultInvokeDispatcher).AssemblyQualifiedName;
 
-
             config.ProviderConfiguration = new ProviderConfiguration
             {
                 ApiDomain = "api.seif.com",
-                ApiIpAddress = "127.0.0.1",
-                Protocol = "",
-                SerializeMode = "",
-                NodeCode = "",
+                ApiIpAddress = "localhost:3333",
+                Protocol = "HttpInvoker",
+                SerializeMode = "ServiceStackJsonSerializer",
+                NodeCode = "PV",
                 AddtionalFields = new KeyValueConfigurationCollection()
             };
+            config.ProviderConfiguration.AddtionalFields.Add(AttrKeys.ApiGetEntrance, "api/common/get");
+            config.ProviderConfiguration.AddtionalFields.Add(AttrKeys.ApiPostEntrance, "api/common/post");
 
             config.ConsumerConfiguration = new ConsumerConfiguration
             {
-                NodeCode = "",
-                Url = ""
+                NodeCode = "CC",
+                Url = "127.0.0.1"
             };
 
             config.RegistryConfiguration = new RegistryConfiguration
@@ -76,6 +77,14 @@ namespace Demo.Client
 
             cfg.Sections.Add("SeifConfiguration", config);
             cfg.Save();
+
+            SeifApplication.Initialize(config);
+            SeifApplication.ReferenceService<IDemoService>(new ProxyOptions(), new IInvokeFilter[0]);
+
+            //SeifApplication.ReferenceService<IEchoService>(new ProxyOptions(), new IInvokeFilter[0]);
+            SeifApplication.AppEnv.TypeBuilder.Build();
+
+
             //ConfigurationManager.RefreshSection("SeifConfiguration");  
 
             //SeifApplication.ReferenceService<IDemoService>(new ProxyOptions(), new IInvokeFilter[0]);
@@ -89,11 +98,34 @@ namespace Demo.Client
             //var server = new HttpSelfHostServer(config);
             //server.OpenAsync().Wait();
 
-            //var demoServer = SeifApplication.Resolve<IDemoService>();
-            //demoServer.PrintServer();
+            var demoServer = SeifApplication.Resolve<IDemoService>();
+            demoServer.PrintServer();
 
-            //Console.WriteLine("Client is connected");
-            //Console.Read();
+            var model = new ComplexModel
+            {
+                Name = "AAAA",
+                CreateDate = DateTime.Now,
+                Values = new Dictionary<string, string> ()
+            };
+
+            model.Values.Add("AAA","BBB");
+
+            var serializer = new ServiceStackJsonSerializer();
+            var modelJson = serializer.Serialize(model);
+            var modelFromJson = serializer.Deserialize(typeof (ComplexModel), modelJson);
+
+            var intVal = demoServer.AddModel(model);
+            Console.WriteLine("Create Model: {0}", intVal == 1);
+
+            var dbModel = demoServer.GetModel(model.Name);
+            Console.WriteLine("Get Model: {0}", dbModel != null);
+
+            dbModel = demoServer.GetModel(model.Name, "AAA");
+            Console.WriteLine("Get Model By Value: {0}", dbModel != null);
+
+
+            Console.WriteLine("Client is connected");
+            Console.Read();
 
         }
     }

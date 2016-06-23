@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Castle.DynamicProxy;
+using Seif.Rpc.Common;
+using Seif.Rpc.Invoke;
+using IInvocation = Seif.Rpc.Invoke.IInvocation;
 
-namespace Seif.Rpc.Invoke.Default
+namespace Seif.Rpc.Default
 {
     public class CallingInterceptor<T> : IInterceptor
     {
@@ -25,10 +28,14 @@ namespace Seif.Rpc.Invoke.Default
         {
             var wrapper = new InvokerWrapper(_invoker, _filters);
 
-            IDictionary<Type, object> parameters = new Dictionary<Type, object>();
+            IList<ParameterData> parameters = new List<ParameterData>();
             for (int i = 0; i < invocation.Arguments.Length; i++)
             {
-                parameters.Add(invocation.Arguments[i].GetType(), invocation.Arguments[i]);
+                parameters.Add(new ParameterData
+                {
+                    TypeName = invocation.Arguments[i].GetType().FullName,
+                    Data = _invoker.Serializer.Serialize(invocation.Arguments[i])
+                });
             }
 
             var serviceType = typeof (T);
@@ -37,11 +44,14 @@ namespace Seif.Rpc.Invoke.Default
                 TraceId = Guid.NewGuid().ToString("N"),
                 ServiceName = serviceType.FullName,
                 MethodName = invocation.Method.Name,
+                ReturnType = invocation.Method.ReturnType,
                 Parameters = parameters,
                 Attributes = new Dictionary<string, string>()
             };
 
-            invocation.ReturnValue = wrapper.Invoke(rpcInvocation);
+            var result = wrapper.Invoke(rpcInvocation);
+            //var resultHandler = SeifApplication.AppEnv.GlobalConfiguration.ConsumerConfiguration.GetResultHandler();
+            invocation.ReturnValue = result.Result;
         }
     }
 }

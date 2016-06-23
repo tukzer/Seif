@@ -15,7 +15,7 @@ namespace Seif.Rpc.Registry
 
         public string ServiceIdentifier
         {
-            get { return string.Format("{0}-{1}", ServerAddress, InterfaceType); }
+            get { return string.Format("{0}@{1}-{2}", ApiDomain,ServerAddress, InterfaceType); }
         }
     }
 

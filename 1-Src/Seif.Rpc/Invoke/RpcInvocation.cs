@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Seif.Rpc.Common;
 
 namespace Seif.Rpc.Invoke
 {
@@ -15,7 +16,9 @@ namespace Seif.Rpc.Invoke
 
         public virtual string MethodName { get; set; }
 
-        public virtual IDictionary<Type, object> Parameters { get; set; }
+        public virtual Type ReturnType { get; set; }
+
+        public virtual IList<ParameterData> Parameters { get; set; }
 
         public virtual IDictionary<string, string> Attributes { get; set; }
     }

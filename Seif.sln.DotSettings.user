@@ -8,4 +8,5 @@
   &lt;Assembly Path="C:\Users\wancheng\Source\Repos\Yoseif\Seif\packages\ServiceStack.Text.4.0.42\lib\net40\ServiceStack.Text.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Windows\Microsoft.NET\Framework\v4.0.30319\System.Configuration.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Users\wancheng\Source\Repos\Yoseif\Seif\packages\ServiceStack.Common.4.0.40\lib\net40\ServiceStack.Common.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Windows\Microsoft.NET\Framework\v4.0.30319\System.Web.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>

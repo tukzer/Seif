@@ -3,6 +3,9 @@
     public interface IInvoker
     {
         string Url { get;  }
+
+        ISerializer Serializer { get; }
+
         InvokeResult Invoke(IInvocation invocation);
     }
 

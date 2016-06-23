@@ -1,6 +1,8 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Seif.Rpc.Utils;
 
 namespace Seif.Rpc.Registry
 {
@@ -8,20 +10,40 @@ namespace Seif.Rpc.Registry
     {
         private readonly IRegistryDataStore _registryDataStore;
         private readonly IRegistryNotify _registryNotify;
+        private readonly IWatcher _watcher;
 
         private readonly ConcurrentDictionary<string, ConcurrentDictionary<string, ServiceRegistryMetta>>
             _availableServer = new ConcurrentDictionary<string, ConcurrentDictionary<string, ServiceRegistryMetta>>();
 
-        public GenericRegistry(IRegistryDataStore registryDataStore,IRegistryNotify registryNotify)
+        //private readonly ConcurrentBag<string> _activeServer = new ConcurrentBag<string>();
+
+        public GenericRegistry(IRegistryDataStore registryDataStore,IRegistryNotify registryNotify, IWatcher watcher)
         {
             _registryDataStore = registryDataStore;
             _registryNotify = registryNotify;
+            _watcher = watcher;
 
             if (_registryNotify != null)
-                _registryNotify.ServiceChanged += RegistryNotifyServerChanged;
+            {
+                _registryNotify.ServiceChanged += RegistryNotifyOnServiceChanged;
+            }
+
+            if (_watcher != null)
+            {
+                _watcher.MarkDead += delegate(string s)
+                {
+                    foreach (var serviceList in _availableServer.Values)
+                    {
+                        foreach (var metta in serviceList.Where(p => p.Value.ServerAddress == s))
+                        {
+                            UnregisterService(metta.Value);
+                        }
+                    }
+                };  
+            }
         }
 
-        void RegistryNotifyServerChanged(object sender, ServiceNotifyEventArgs e)
+        private void RegistryNotifyOnServiceChanged(object sender, ServiceNotifyEventArgs e)
         {
             var interfaceName = e.Data.InterfaceType;
             if (_availableServer.ContainsKey(interfaceName))
@@ -34,6 +56,7 @@ namespace Seif.Rpc.Registry
                     if (!e.Data.IsEnabled)
                     {
                         bag.TryRemove(e.Data.ServiceIdentifier, out metta);
+                        Unwatch(e.Data);
                         return;
                     }
 
@@ -42,6 +65,7 @@ namespace Seif.Rpc.Registry
                 else
                 {
                     bag.TryAdd(e.Data.ServiceIdentifier, e.Data);
+                    Watch(e.Data);
                 }
             }
             else
@@ -52,19 +76,22 @@ namespace Seif.Rpc.Registry
             }
         }
 
-        public void RegisterService(ServiceRegistryMetta serviceMetta)
+        public void RegisterService(ServiceRegistryMetta nodeData)
         {
-            var data = RegistryUtils.ToDataObject(serviceMetta);
-            if (data == null)
-                throw new SeifException("Cannot register service, no data is provided.");
+            _registryDataStore.Add(nodeData.ToDataObject());
+            _registryNotify.NotifyChange(nodeData);
+        }
 
-            _registryDataStore.Add(data);
-            _registryNotify.NotifyChange(serviceMetta);
+        public void UnregisterService(ServiceRegistryMetta nodeData)
+        {
+            _registryDataStore.Remove(nodeData.ServiceIdentifier);
+            nodeData.IsEnabled = false;
+            _registryNotify.NotifyChange(nodeData);
         }
 
         public ServiceRegistryMetta[] GetServiceRegistryMetta<T>()
         {
-            var interfaceName = typeof (T).FullName;
+            var interfaceName = typeof (T).AssemblyQualifiedName;
             var list = _registryDataStore.GetAllByInterface(interfaceName);
 
 
@@ -75,11 +102,39 @@ namespace Seif.Rpc.Registry
 
             var bag = new ConcurrentDictionary<string, ServiceRegistryMetta>(list.Select(p =>
             {
-                var metta = RegistryUtils.ToPlainObject(p);
+                var metta = p.ToPlainObject();
                 return new KeyValuePair<string, ServiceRegistryMetta>(metta.ServiceIdentifier, metta);
             }));
             _availableServer.AddOrUpdate(interfaceName, bag, (s, mettas) => bag);
+
+            foreach (var item in list)
+            {
+                 Watch(item.ToPlainObject());
+            }
+
             return _availableServer[interfaceName].Values.ToArray();
+        }
+
+        protected virtual void Watch(ServiceRegistryMetta metta)
+        {
+            if (_watcher == null) return;
+
+            _watcher.Watch(metta.ServerAddress, new WatcherOptions
+            {
+                ServiceMetta = metta
+            });
+        }
+
+        protected virtual void Unwatch(ServiceRegistryMetta metta)
+        {
+            if (_watcher == null) return;
+
+            if(!_watcher.IsInWatchList(metta.ServerAddress))
+            {
+                return;
+            }
+
+            _watcher.Unwatch(metta.ServerAddress);
         }
     }
 }

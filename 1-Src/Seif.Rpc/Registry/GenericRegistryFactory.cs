@@ -9,7 +9,7 @@
 
         public virtual IServiceRegistry CreateRegistry(RegistryOptions options)
         {
-            return new GenericRegistry(options.RegistryDataStore, options.RegistryNotify);
+            return new GenericRegistry(options.RegistryDataStore, options.RegistryNotify, options.Watcher);
         }
     }
 }

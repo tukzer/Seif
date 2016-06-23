@@ -1,7 +1,8 @@
 ﻿using Castle.DynamicProxy;
 using Seif.Rpc.Dispatch;
+using Seif.Rpc.Invoke;
 
-namespace Seif.Rpc.Invoke.Default
+namespace Seif.Rpc.Default
 {
     public class DynamicProxyFactory : IProxyFactory
     {

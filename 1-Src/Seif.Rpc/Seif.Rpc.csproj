@@ -36,6 +36,7 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\ParameterData.cs" />
     <Compile Include="Configuration\ConsumerConfiguration.cs" />
     <Compile Include="Configuration\SeifConfiguration.cs" />
     <Compile Include="Configuration\ServiceConfiguration.cs" />
@@ -43,15 +44,21 @@
     <Compile Include="Dispatch\RoundRobinDispatchStragedy.cs" />
     <Compile Include="Dispatch\ServiceLoad.cs" />
     <Compile Include="Dispatch\IInvokeDispatcher.cs" />
+    <Compile Include="Invoke\GenericInvoker.cs" />
     <Compile Include="Invoke\IEchoService.cs" />
     <Compile Include="Invoke\IInvocation.cs" />
     <Compile Include="Invoke\InvokeResult.cs" />
     <Compile Include="Invoke\InvokerWrapper.cs" />
+    <Compile Include="Invoke\ResultHandler.cs" />
     <Compile Include="Invoke\RpcInvocation.cs" />
+    <Compile Include="Invoke\RpcPayload.cs" />
     <Compile Include="Registry\GenericRegistryFactory.cs" />
+    <Compile Include="Registry\GenericWatcher.cs" />
     <Compile Include="Registry\IRegistryDataStore.cs" />
     <Compile Include="Registry\IRegistryFactory.cs" />
     <Compile Include="Registry\IRegistryNotify.cs" />
+    <Compile Include="Registry\IWatcher.cs" />
+    <Compile Include="Registry\ProviderRegistryInfo.cs" />
     <Compile Include="Registry\RegistryDataInfo.cs" />
     <Compile Include="Registry\RegistryOptions.cs" />
     <Compile Include="Registry\RegistryUtils.cs" />

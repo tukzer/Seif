@@ -4,9 +4,9 @@ using Seif.Rpc.Utils;
 
 namespace Seif.Rpc.Registry
 {
-    public class RegistryUtils
+    internal static class RegistryUtils
     {
-        public static ServiceRegistryMetta ToPlainObject(RegistryDataInfo data)
+        public static ServiceRegistryMetta ToPlainObject( this RegistryDataInfo data)
         {
             if (data.ApiDomain == null) return null;
 
@@ -19,11 +19,11 @@ namespace Seif.Rpc.Registry
                 SerializeMode = data.SerializeMode,
                 IsEnabled = data.IsEnabled,
                 ServerAddress = data.ServerAddress,
-                Attributes = DictionaryUtils.GetFromUrl(data.AdditionalFields)
+                Attributes = data.AdditionalFields
             };
         }
 
-        public static RegistryDataInfo ToDataObject(ServiceRegistryMetta metta)
+        public static RegistryDataInfo ToDataObject(this ServiceRegistryMetta metta)
         {
             if (metta.ApiDomain == null) return null;
 
@@ -36,7 +36,7 @@ namespace Seif.Rpc.Registry
                 SerializeMode = metta.SerializeMode,
                 IsEnabled = metta.IsEnabled,
                 ServerAddress = metta.ServerAddress,
-                AdditionalFields = DictionaryUtils.ToUrlString( metta.Attributes)
+                AdditionalFields =  metta.Attributes
             };
         }
     }

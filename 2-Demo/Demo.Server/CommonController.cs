@@ -1,14 +1,43 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Web.Http;
+using Seif.Rpc;
+using Seif.Rpc.Default;
 using Seif.Rpc.Invoke;
-using Seif.Rpc.Invoke.Default;
 
 namespace Demo.Server
 {
     public class CommonController : ApiController
     {
-        public InvokeResult Post(RpcInvocation invocation)
+        private readonly ISerializer _serializer;
+
+        public CommonController()
         {
-            var invoker = new LocalInvoker();
+            _serializer = SeifApplication.AppEnv.GlobalConfiguration.ProviderConfiguration.GetSerializer();
+        }
+
+        //public InvokeResult Post(RpcInvocation invocation)
+        //{
+        //    var invoker = new LocalInvoker();
+        //    return invoker.Invoke(invocation);
+        //}
+        public InvokeResult Post([FromUri]string svc, [FromUri]string mtd, 
+            [FromBody]string payload)
+        {
+            var rpcPayload = _serializer.Deserialize<RpcPayload>(payload) ?? new RpcPayload();
+
+            var invoker = new LocalInvoker(_serializer);
+            return invoker.Invoke(new RpcInvocation
+            {
+                Attributes = rpcPayload.Attributes,
+                MethodName = mtd,
+                ServiceName = svc,
+                Parameters = rpcPayload.Parameters
+            });
+        }
+        public InvokeResult Get(RpcInvocation invocation)
+        {
+            var invoker = new LocalInvoker(_serializer);
             return invoker.Invoke(invocation);
         }
     }

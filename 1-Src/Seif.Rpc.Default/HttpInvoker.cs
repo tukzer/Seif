@@ -1,9 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Web;
+using Seif.Rpc.Invoke;
+using Seif.Rpc.Registry;
 using Seif.Rpc.Utils;
+using ServiceStack;
 
-namespace Seif.Rpc.Invoke.Default
+namespace Seif.Rpc.Default
 {
     public class HttpInvoker : IInvoker
     {
@@ -26,8 +35,34 @@ namespace Seif.Rpc.Invoke.Default
         public InvokeResult Invoke(IInvocation invocation)
         {
             if (invocation == null)
-                throw  new Exception("Error Invoke Parameters");
+                throw  new SeifException("Error Invoke Parameters");
 
+            try
+            {
+                return DoInvoke(invocation);
+            }
+            catch (WebException webEx)
+            {
+                return new InvokeResult
+                {
+                    Status = ResultStatus.ServerNotReachable,
+                    Exceptions = new Exception[] {webEx},
+                    Message = webEx.Message
+                };
+            }
+            catch (Exception ex)
+            {
+                return new InvokeResult
+                {
+                    Status = ResultStatus.UnknownError,
+                    Exceptions = new Exception[] { ex },
+                    Message = ex.Message
+                };
+            }
+        }
+
+        protected virtual InvokeResult DoInvoke(IInvocation invocation)
+        {
             // 合并调用参数
             var attributes = invocation.Attributes.MergeAndNew(_attributes);
 
@@ -36,16 +71,39 @@ namespace Seif.Rpc.Invoke.Default
                 : "POST";
 
             var apiEntrance = GetApiEntrance(attributes, invocation.ServiceName, invocation.MethodName, httpVerb);
+            var url = this.Url;
+
+            if (!url.StartsWith("http"))
+            {
+                url = string.Format("http://{0}", url);
+            }
+
+            var payload = new RpcPayload
+            {
+                Parameters = invocation.Parameters,
+                Attributes = invocation.Attributes
+            };
+            var requestJson = DoSerialize(payload);
+            InvokeResult result;
 
             switch (httpVerb)
             {
                 case "Get":
-                    return DoGet(this.Url, apiEntrance);
+                    result = DoGet(url, apiEntrance, requestJson);
+                    break;
                 default:
-                    var requestJson = DoSerialize(invocation.Parameters);
-                    return DoPost(this.Url, apiEntrance, requestJson);
+                    result = DoPost(url, apiEntrance, requestJson);
+                    break;
             }
+
+            return result;
         }
+
+        protected virtual ServiceRegistryMetta GetServiceMetta(string serviceName)
+        {
+            return null; //SeifApplication.AppEnv.GlobalConfiguration.Registry.GetServiceRegistryMetta<>()
+        }
+
 
         protected virtual string DoSerialize(object request)
         {
@@ -89,39 +147,44 @@ namespace Seif.Rpc.Invoke.Default
         {
             //TODO:不是系统的关键字
 
-            return string.Join("&", attributes.Select(p => p.Key).Concat(new [] {serviceName, methodName}));
+            var sb = new StringBuilder();
+            sb.AppendFormat("&{0}={1}", "svc", serviceName);
+            sb.AppendFormat("&{0}={1}", "mtd", methodName);
+
+            //foreach (var item in attributes)
+            //{
+            //    sb.AppendFormat("&{0}={1}", item.Key, HttpUtility.UrlEncode(item.Value));
+            //}
+
+            return sb.ToString();
         }
 
-        protected InvokeResult DoGet(string requestAddr, string endpoint)
+        protected InvokeResult DoGet(string endpoint, string requestAddr, string requestJson = "{}" )
         {
-            //using (var client = new HttpClient())
-            //{
-            //    client.BaseAddress = new Uri(endpoint);
-            //    client.DefaultRequestHeaders.Accept.Add(
-            //        new MediaTypeWithQualityHeaderValue("application/json"));
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(endpoint);
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
 
-            //    var entry = string.Format("{0}/{1}", endpoint, ReplaceUrlParams(requestAddr));
-            //    var taskRes = client.GetAsync(entry);
-            //    return taskRes.Result.Content.ReadAsAsync<T>().Result;
-            //}
-            throw new NotImplementedException();
+                var entry = string.Format("{0}/{1}", endpoint, requestAddr);
+                var taskRes = client.GetAsync(entry);
+                return taskRes.Result.Content.ReadAsAsync<InvokeResult>().Result;
+            }
         }
 
         protected InvokeResult DoPost(string endpoint, string apiAddr, string requestJson = "{}", bool checkParams = true)
         {
-            //using (var client = new HttpClient())
-            //{
-            //    client.BaseAddress = new Uri(endpoint);
-            //    client.DefaultRequestHeaders.Accept.Add(
-            //        new MediaTypeWithQualityHeaderValue("application/json"));
-            //    //client.DefaultRequestHeaders.cont
-            //    //client.DefaultRequestHeaders.Add("Content-Type", "application/json");
-            //    var entry = string.Format("{0}/{1}", endpoint, ReplaceUrlParams(apiAddr.Trim('/'), checkParams));
-            //    MediaTypeFormatter jsonFormatter = new JsonMediaTypeFormatter();
-            //    var taskRes = client.PostAsync(entry, requestJson, jsonFormatter);
-            //    return taskRes.Result.Content.ReadAsAsync<T>().Result;
-            //}
-            throw new NotImplementedException();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(endpoint);
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+                var entry = string.Format("{0}/{1}", endpoint, apiAddr);
+                MediaTypeFormatter jsonFormatter = new JsonMediaTypeFormatter();
+                var taskRes = client.PostAsync(entry, requestJson, jsonFormatter);
+                return taskRes.Result.Content.ReadAsAsync<InvokeResult>().Result;
+            }
         }
 
     }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Seif.Rpc.Invoke
+﻿namespace Seif.Rpc.Invoke
 {
     public interface IProxyFactory
     {
