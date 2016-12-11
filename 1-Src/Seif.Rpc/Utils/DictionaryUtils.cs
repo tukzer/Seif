@@ -46,6 +46,17 @@ namespace Seif.Rpc.Utils
             }
             return dictionary;
         }
+        public static KeyValueConfigurationCollection  ToConfig(
+           IDictionary<string, string> dictionary)
+        {
+            KeyValueConfigurationCollection keyValueConfigurationCollection = new KeyValueConfigurationCollection();
+
+            foreach (var item in dictionary)
+            {
+                keyValueConfigurationCollection.Add(item.Key, item.Value);
+            }
+            return keyValueConfigurationCollection;
+        }
 
         public static string TryGetValue(this IDictionary<string, string> dictionary, string key, string defaultValue = null)
         {

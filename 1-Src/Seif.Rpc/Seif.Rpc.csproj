@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\ParameterData.cs" />
+    <Compile Include="ApplicationBuilder.cs" />
     <Compile Include="Configuration\ConsumerConfiguration.cs" />
     <Compile Include="Configuration\SeifConfiguration.cs" />
     <Compile Include="Configuration\ServiceConfiguration.cs" />
@@ -44,7 +45,6 @@
     <Compile Include="Dispatch\RoundRobinDispatchStragedy.cs" />
     <Compile Include="Dispatch\ServiceLoad.cs" />
     <Compile Include="Dispatch\IInvokeDispatcher.cs" />
-    <Compile Include="Invoke\GenericInvoker.cs" />
     <Compile Include="Invoke\IEchoService.cs" />
     <Compile Include="Invoke\IInvocation.cs" />
     <Compile Include="Invoke\InvokeResult.cs" />
@@ -58,6 +58,7 @@
     <Compile Include="Registry\IRegistryFactory.cs" />
     <Compile Include="Registry\IRegistryNotify.cs" />
     <Compile Include="Registry\IWatcher.cs" />
+    <Compile Include="Registry\NullRegistry.cs" />
     <Compile Include="Registry\ProviderRegistryInfo.cs" />
     <Compile Include="Registry\RegistryDataInfo.cs" />
     <Compile Include="Registry\RegistryOptions.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="SeifException.cs" />
     <Compile Include="Utils\DictionaryUtils.cs" />
     <Compile Include="Utils\TypeUtils.cs" />
+    <Compile Include="Utils\UriUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
