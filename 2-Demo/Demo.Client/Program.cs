@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Drawing;
 using Demo.Service;
 using Seif.Rpc;
 using Seif.Rpc.Configuration;
@@ -123,6 +124,8 @@ namespace Demo.Client
             dbModel = demoServer.GetModel(model.Name, "AAA");
             Console.WriteLine("Get Model By Value: {0}", dbModel != null);
 
+            //var result = demoServer.GetCounterAsync("aaa");
+            //Console.WriteLine("GetCounterAsync: {0}", result);
 
             Console.WriteLine("Client is connected");
             Console.Read();

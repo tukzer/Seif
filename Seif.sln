@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Service", "Demo.Servic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seif.Rpc.Default", "1-Src\Seif.Rpc.Default\Seif.Rpc.Default.csproj", "{8395B3D2-C993-4A6A-BB30-DA74E8A5EC17}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "8-Core", "8-Core", "{C5743572-B83B-4962-B672-6EE392F885BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Demo.Service;
 
 namespace Demo.Server.ServiceImpl
@@ -29,5 +31,11 @@ namespace Demo.Server.ServiceImpl
         {
             return _listSource.FirstOrDefault(p => p.Name == name && p.Values != null && p.Values.ContainsKey(value));
         }
+
+        //public async Task<int> GetCounterAsync(string name)
+        //{
+        //    Thread.Sleep(1000);
+        //    return 10;
+        //}
     }
 }
