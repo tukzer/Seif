@@ -18,6 +18,7 @@ namespace Seif.Rpc.Default
         public void RegisterType<T>(T instance) where T : class
         {
             _containerBuilder.RegisterInstance(instance).As<T>();
+            _containerBuilder.Update(_containerBuilder.Build());
         }
 
         public void Build()

@@ -82,6 +82,8 @@
     <Compile Include="RpcContext.cs" />
     <Compile Include="SeifException.cs" />
     <Compile Include="Utils\DictionaryUtils.cs" />
+    <Compile Include="Utils\ILUtils.cs" />
+    <Compile Include="Utils\SyntaxTreeUtils.cs" />
     <Compile Include="Utils\TypeUtils.cs" />
     <Compile Include="Utils\UriUtils.cs" />
   </ItemGroup>
