@@ -35,6 +35,10 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.4.0.0\lib\net45\Castle.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,19 +50,23 @@
   <ItemGroup>
     <Compile Include="Common\Asserts.cs" />
     <Compile Include="Common\ISerializer.cs" />
+    <Compile Include="Default\CallingInterceptor.cs" />
+    <Compile Include="Default\DefaultInvokeDispatcher.cs" />
+    <Compile Include="Default\DynamicProxyFactory.cs" />
     <Compile Include="Invoke\IInvokeFilter.cs" />
     <Compile Include="Invoke\IInvocation.cs" />
     <Compile Include="Invoke\IInvoker.cs" />
+    <Compile Include="Invoke\InvokeContext.cs" />
     <Compile Include="Invoke\InvokeOptions.cs" />
+    <Compile Include="Invoke\InvokeResult.cs" />
     <Compile Include="Invoke\InvokerInstanceType.cs" />
-    <Compile Include="Invoke\PooledInvokerFactory.cs" />
+    <Compile Include="Invoke\InvokerWrapper.cs" />
     <Compile Include="Invoke\RpcInvocation.cs" />
-    <Compile Include="Invoke\RpcResult.cs" />
     <Compile Include="Invoke\IResultHandler.cs" />
     <Compile Include="IRpcApplication.cs" />
     <Compile Include="Common\ITypeContainer.cs" />
     <Compile Include="Invoke\IInvokerFactory.cs" />
-    <Compile Include="Proxy\DynamicObjectProxyFactory.cs" />
+    <Compile Include="IServiceUrlConverter.cs" />
     <Compile Include="Proxy\ProxyLifeCycle.cs" />
     <Compile Include="Proxy\RandomDispatcher.cs" />
     <Compile Include="Dispatch\IDispatcher.cs" />
@@ -72,9 +80,18 @@
     <Compile Include="Runtime\IServiceEndpoint.cs" />
     <Compile Include="Runtime\IServiceHost.cs" />
     <Compile Include="Runtime\ServiceClient.cs" />
+    <Compile Include="SeifApplication.cs" />
     <Compile Include="ServiceMetta.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Runtime\Codec\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

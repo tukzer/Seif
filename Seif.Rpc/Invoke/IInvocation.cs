@@ -6,10 +6,9 @@ namespace Seif.Rpc.Invoke
     public interface IInvocation
     {
         string TraceId { get; set; }
-        string ServiceName { get; }
-        string MethodName { get; }
-        Type ReturnType { get; }
-        IList<string> Parameters { get; }
+        string ServiceName { get; set; }
+        string MethodName { get; set; }
+        IList<object> Parameters { get; set; }
         IDictionary<string, string> Attributes { get; set; }
     }
 }

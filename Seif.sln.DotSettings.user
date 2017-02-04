@@ -13,4 +13,5 @@
   &lt;Assembly Path="C:\Users\wancheng\Source\Repos\Yoseif\Seif\packages\Microsoft.AspNet.WebApi.SelfHost.4.0.20710.0\lib\net40\System.Web.Http.SelfHost.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Users\wancheng\Source\Repos\Yoseif\Seif\packages\Microsoft.AspNet.WebApi.Core.4.0.20710.0\lib\net40\System.Web.Http.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Windows\Microsoft.NET\Framework\v4.0.30319\System.Net.Http.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Users\wancheng\Source\Repos\Yoseif\Seif\packages\Castle.Core.3.3.3\lib\net40-client\Castle.Core.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>

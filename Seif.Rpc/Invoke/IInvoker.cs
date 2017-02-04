@@ -6,6 +6,6 @@ namespace Seif.Rpc.Invoke
     {
         string Url { get; }
         ISerializer Serializer { get; }
-        RpcResult Call(RpcInvocation invocation);
+        InvokeResult Call(IInvocation invocation);
     }
 }

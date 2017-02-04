@@ -7,7 +7,6 @@ namespace Seif.Rpc.Runtime
     {
         ISerializer Serializer { get; set; }
         IInvokerFactory InvokerFactory { get; set; }
-
         IInvoker GetInvoker();
     }
 }

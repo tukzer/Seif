@@ -55,7 +55,7 @@ namespace Seif.Rpc.Invoke
 
             try
             {
-                var result  = _invoker.Invoke(invocation);
+                var result  = _invoker.Call(invocation);
                 result.Status = ResultStatus.Success;
                 context.InvokeResult = result;
 

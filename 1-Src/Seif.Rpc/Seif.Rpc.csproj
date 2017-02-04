@@ -47,6 +47,7 @@
     <Compile Include="Dispatch\IInvokeDispatcher.cs" />
     <Compile Include="Invoke\IEchoService.cs" />
     <Compile Include="Invoke\IInvocation.cs" />
+    <Compile Include="Invoke\InvokeContext.cs" />
     <Compile Include="Invoke\InvokeResult.cs" />
     <Compile Include="Invoke\InvokerWrapper.cs" />
     <Compile Include="Invoke\ResultHandler.cs" />
